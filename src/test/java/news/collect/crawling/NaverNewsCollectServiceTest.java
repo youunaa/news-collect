@@ -1,6 +1,7 @@
 package news.collect.crawling;
 
-import news.collect.NaverApp;
+import news.collect.crawling.model.News;
+import news.collect.repository.NewsRepository;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -12,11 +13,15 @@ import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 class NaverNewsCollectServiceTest {
 
     public static Logger log = LoggerFactory.getLogger(NaverNewsCollectServiceTest.class);
+
+    private final NewsRepository newsRepository;
+
+    NaverNewsCollectServiceTest(NewsRepository newsRepository) {
+        this.newsRepository = newsRepository;
+    }
 
     @Test
     void newsCrawling() throws UnsupportedEncodingException {
@@ -36,7 +41,13 @@ class NaverNewsCollectServiceTest {
                     .append(".news_tit");
 
             for (Element el : doc.select(els.toString())) {
-                log.info(el.text() + " " + el.attr("abs:href"));
+                News news = News.builder()
+                        .id(1L)
+                        .subject(el.text())
+                        .type("naver")
+                        .newsUrl(el.attr("abs:href"))
+                        .build();
+                newsRepository.save(news);
             }
         } catch (IOException e) {
             e.printStackTrace();
