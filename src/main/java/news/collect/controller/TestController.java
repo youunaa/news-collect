@@ -23,13 +23,6 @@ public class TestController {
     @GetMapping("collect")
     public HashMap<String, Object> newsCollect(String type) throws Exception {
         HashMap<String, Object> map = new HashMap<>();
-
-        if (type.equals(NewsType.Naver.name())) {
-            naverNewsCollectService.NewsCrawling();
-        } else if (type.equals(NewsType.Daum.name())) {
-            daumNewsCollectService.NewsCrawling();
-        }
-
         map.put("test", "ok");
         return map;
     }

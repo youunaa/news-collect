@@ -25,8 +25,7 @@ public class NaverNewsCollectService implements NewsCollectService {
     }
 
     @Override
-    public void NewsCrawling() throws UnsupportedEncodingException {
-        String keyword = "코로나";
+    public void NewsCrawling(String keyword) throws UnsupportedEncodingException {
         String text = URLEncoder.encode(keyword, "UTF-8");
         String URL = "https://search.naver.com/search.naver?where=news&ie=utf8&sm=nws_hty&query=" + text;
         Document doc;

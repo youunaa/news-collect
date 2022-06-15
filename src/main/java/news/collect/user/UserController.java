@@ -26,6 +26,7 @@ public class UserController extends BaseController {
     public Logger log = LoggerFactory.getLogger(UserController.class);
 
     final private UserRepository userRepository;
+
     final private JwtManager jwtManager;
 
     @Autowired

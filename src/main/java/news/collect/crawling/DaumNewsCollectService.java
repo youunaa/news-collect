@@ -26,8 +26,7 @@ public class DaumNewsCollectService implements NewsCollectService {
     }
 
     @Override
-    public void NewsCrawling() throws UnsupportedEncodingException {
-        String keyword = "코로나";
+    public void NewsCrawling(String keyword) throws UnsupportedEncodingException {
         String text = URLEncoder.encode(keyword, "UTF-8");
         String URL = "https://search.daum.net/search?w=news&nil_search=btn&DA=NTB&enc=utf8&cluster=y&cluster_page=1&q=" + text;
         Document doc;
