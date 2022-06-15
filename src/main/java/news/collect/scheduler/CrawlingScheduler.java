@@ -28,7 +28,7 @@ public class CrawlingScheduler {
     /**
      * 특정 키워드가 들어간 뉴스를 수집하는 스케줄러
      */
-    @Scheduled(cron = "10 * * * * *")
+    @Scheduled(cron = "0 0 * * * *")
     public void NewsCrawling() {
         // 수집 키워드 목록
         Iterable<CollectData> keword = collectDataRepository.findAll();
