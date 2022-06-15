@@ -43,9 +43,9 @@ public class UserController extends BaseController {
      * @param param
      * @return
      */
+    @ResponseBody
     @PostMapping("join")
     public BaseModel userSave(@RequestBody User param) {
-        BodyModel body = new BodyModel();
         String encodedPassword = passwordEncoder.encode(param.getPassword());
 
         User user = User.builder()
@@ -55,7 +55,7 @@ public class UserController extends BaseController {
                 .build();
         userRepository.save(user);
 
-        return ok(body);
+        return ok(new BodyModel());
     }
 
     /**
