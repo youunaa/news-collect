@@ -1,9 +1,10 @@
 package news.collect.controller;
 
+import news.collect.crawling.DaumNewsCollectService;
 import news.collect.crawling.NaverNewsCollectService;
+import news.collect.crawling.model.NewsType;
 import org.springframework.web.bind.annotation.*;
 
-import java.io.UnsupportedEncodingException;
 import java.util.HashMap;
 
 @RestController
@@ -12,15 +13,22 @@ public class TestController {
 
     final private NaverNewsCollectService naverNewsCollectService;
 
-    public TestController(NaverNewsCollectService naverNewsCollectService) {
+    final private DaumNewsCollectService daumNewsCollectService;
+
+    public TestController(NaverNewsCollectService naverNewsCollectService, DaumNewsCollectService daumNewsCollectService) {
         this.naverNewsCollectService = naverNewsCollectService;
+        this.daumNewsCollectService = daumNewsCollectService;
     }
 
-    @GetMapping("test")
-    public HashMap<String, Object> userSave() throws Exception {
+    @GetMapping("collect")
+    public HashMap<String, Object> newsCollect(String type) throws Exception {
         HashMap<String, Object> map = new HashMap<>();
 
-        naverNewsCollectService.NewsCrawling();
+        if (type.equals(NewsType.Naver.name())) {
+            naverNewsCollectService.NewsCrawling();
+        } else if (type.equals(NewsType.Daum.name())) {
+            daumNewsCollectService.NewsCrawling();
+        }
 
         map.put("test", "ok");
         return map;

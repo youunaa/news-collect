@@ -1,6 +1,7 @@
 package news.collect.crawling;
 
 import news.collect.crawling.model.News;
+import news.collect.crawling.model.NewsType;
 import news.collect.repository.NewsRepository;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -43,12 +44,13 @@ public class NaverNewsCollectService implements NewsCollectService {
 
             for (Element el : doc.select(els.toString())) {
                 News news = News.builder()
-                        .type("naver")
+                        .type(NewsType.Naver.name())
                         .keyword(keyword)
                         .subject(el.text())
                         .newsUrl(el.attr("abs:href"))
                         .build();
                 newsRepository.save(news);
+                log.info(String.valueOf(news));
             }
         } catch (IOException e) {
             e.printStackTrace();

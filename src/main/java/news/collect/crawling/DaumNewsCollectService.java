@@ -1,5 +1,8 @@
 package news.collect.crawling;
 
+import news.collect.crawling.model.News;
+import news.collect.crawling.model.NewsType;
+import news.collect.repository.NewsRepository;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -13,11 +16,19 @@ import java.net.URLEncoder;
 
 @Service("DaumNewsCollectService")
 public class DaumNewsCollectService implements NewsCollectService {
+
     public static Logger log = LoggerFactory.getLogger(DaumNewsCollectService.class);
+
+    private final NewsRepository newsRepository;
+
+    public DaumNewsCollectService(NewsRepository newsRepository) {
+        this.newsRepository = newsRepository;
+    }
 
     @Override
     public void NewsCrawling() throws UnsupportedEncodingException {
-        String text = URLEncoder.encode("코로나", "UTF-8");
+        String keyword = "코로나";
+        String text = URLEncoder.encode(keyword, "UTF-8");
         String URL = "https://search.daum.net/search?w=news&nil_search=btn&DA=NTB&enc=utf8&cluster=y&cluster_page=1&q=" + text;
         Document doc;
 
@@ -32,7 +43,14 @@ public class DaumNewsCollectService implements NewsCollectService {
                     .append(".tit_main.fn_tit_u");
 
             for (Element el : doc.select(els.toString())) {
-                log.info(el.text() + " " + el.attr("abs:href"));
+                News news = News.builder()
+                        .type(NewsType.Daum.name())
+                        .keyword(keyword)
+                        .subject(el.text())
+                        .newsUrl(el.attr("abs:href"))
+                        .build();
+                newsRepository.save(news);
+                log.info(String.valueOf(news));
             }
         } catch (IOException e) {
             e.printStackTrace();
