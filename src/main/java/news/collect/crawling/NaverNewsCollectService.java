@@ -12,11 +12,10 @@ import org.springframework.stereotype.Service;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
-import java.util.Date;
 
 @Service("NaverNewsCollectService")
 public class NaverNewsCollectService implements NewsCollectService {
-    public static Logger log = LoggerFactory.getLogger(NaverNewsCollectService.class);
+    public Logger log = LoggerFactory.getLogger(NaverNewsCollectService.class);
 
     private final NewsRepository newsRepository;
 
@@ -26,7 +25,8 @@ public class NaverNewsCollectService implements NewsCollectService {
 
     @Override
     public void NewsCrawling() throws UnsupportedEncodingException {
-        String text = URLEncoder.encode("코로나", "UTF-8");
+        String keyword = "코로나";
+        String text = URLEncoder.encode(keyword, "UTF-8");
         String URL = "https://search.naver.com/search.naver?where=news&ie=utf8&sm=nws_hty&query=" + text;
         Document doc;
 
@@ -43,8 +43,9 @@ public class NaverNewsCollectService implements NewsCollectService {
 
             for (Element el : doc.select(els.toString())) {
                 News news = News.builder()
-                        .subject(el.text())
                         .type("naver")
+                        .keyword(keyword)
+                        .subject(el.text())
                         .newsUrl(el.attr("abs:href"))
                         .build();
                 newsRepository.save(news);

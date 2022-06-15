@@ -23,6 +23,9 @@ public class News extends BaseTimeEntity {
     @Column(name="type")
     private String type; // 뉴스 타입(네이버 or 다음)
 
+    @Column(name="keyword")
+    private String keyword; // 뉴스 keyword
+
     @Column(name="subject")
     private String subject; // 뉴스 제목
 
@@ -32,9 +35,10 @@ public class News extends BaseTimeEntity {
     @Column(name="collectDt", nullable = true)
     private Date collectDt; // 데이터 수집일
 
-    public News(Long id, String type, String subject, String newsUrl, Date collectDt) {
+    public News(Long id, String type, String keyword, String subject, String newsUrl, Date collectDt) {
         this.id = id;
         this.type = type;
+        this.keyword = keyword;
         this.subject = subject;
         this.newsUrl = newsUrl;
         this.collectDt = collectDt;
