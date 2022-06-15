@@ -35,8 +35,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS) // jwt token으로 인증하므로 stateless 하도록 처리.
                 .and()
                 .authorizeRequests()
+                .antMatchers("/join").permitAll()
                 .antMatchers("/login").permitAll()
-                .antMatchers("/test").permitAll()
                 .antMatchers("/test2").authenticated()  // 인증권한이 필요한 페이지.
                 .anyRequest().permitAll()
         ;

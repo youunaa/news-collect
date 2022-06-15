@@ -1,7 +1,9 @@
 package news.collect.user;
 
 import news.collect.config.jwt.JwtManager;
-import news.collect.crawling.NaverNewsCollectService;
+import news.collect.controller.BaseController;
+import news.collect.controller.model.BaseModel;
+import news.collect.controller.model.BodyModel;
 import news.collect.repository.UserRepository;
 import news.collect.user.model.User;
 import org.slf4j.Logger;
@@ -15,10 +17,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.HashMap;
+import java.util.Optional;
 
 @Controller
 @RequestMapping("/")
-public class UserController {
+public class UserController extends BaseController {
 
     public Logger log = LoggerFactory.getLogger(UserController.class);
 
@@ -28,15 +31,16 @@ public class UserController {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    public UserController(UserRepository userRepository, JwtManager jwtManager) {
+    public UserController(UserRepository userRepository, JwtManager jwtManager, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
         this.jwtManager = jwtManager;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @PostMapping("join")
-    public void userSave(@RequestBody User param) {
+    public BaseModel userSave(@RequestBody User param) {
+        BodyModel body = new BodyModel();
         String encodedPassword = passwordEncoder.encode(param.getPassword());
-        log.info(encodedPassword);
 
         User user = User.builder()
                 .userId(param.getUserId())
@@ -44,12 +48,14 @@ public class UserController {
                 .userName(param.getUserName())
                 .build();
         userRepository.save(user);
+
+        return ok(body);
     }
 
     @ResponseBody
     @PostMapping("/login")
-    public HashMap<String, Object> userLogin(@RequestBody User param) {
-        HashMap<String, Object> result = new HashMap<>();
+    public BaseModel userLogin(@RequestBody User param) {
+        BodyModel body = new BodyModel();
 
         User user = User.builder()
                 .userId(param.getUserId())
@@ -57,8 +63,9 @@ public class UserController {
                 .build();
 
         String token = jwtManager.generateJwtToken(user);
-        result.put("token", token);
-        return result;
+
+        body.setBody(token);
+        return ok(body);
     }
 
 }
