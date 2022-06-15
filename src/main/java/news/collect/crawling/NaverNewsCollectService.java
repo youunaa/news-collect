@@ -49,7 +49,6 @@ public class NaverNewsCollectService implements NewsCollectService {
                         .newsUrl(el.attr("abs:href"))
                         .build();
                 newsRepository.save(news);
-                log.info(String.valueOf(news));
             }
         } catch (IOException e) {
             e.printStackTrace();

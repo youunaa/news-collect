@@ -64,8 +64,11 @@ public class DataController extends BaseController {
                 .keyword(param.getKeyword())
                 .newsType(param.getNewsType())
                 .build();
+
+        // 수집 키워드 등록
         collectDataRepository.save(collectData);
 
+        // 최초 등록된 키워드는 1번에 한해 바로 수집 처리
         if (param.getNewsType().equals(NewsType.Naver.name())) {
             naverNewsCollectService.NewsCrawling(param.getKeyword());
         } else if (param.getNewsType().equals(NewsType.Daum.name())) {
