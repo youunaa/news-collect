@@ -1,6 +1,7 @@
 package news.collect.user.model;
 
 import lombok.*;
+import news.collect.repository.BaseTimeEntity;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -14,7 +15,7 @@ import javax.persistence.Table;
 @NoArgsConstructor
 @Entity
 @Table(name = "Users")
-public class User {
+public class User extends BaseTimeEntity {
 
     @Id
     @Column(name="userId")
