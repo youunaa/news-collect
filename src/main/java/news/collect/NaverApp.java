@@ -1,5 +1,6 @@
 package news.collect;
 
+import news.collect.crawling.model.News;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -31,7 +32,14 @@ public class NaverApp {
                     .append(".news_tit");
 
             for (Element el : doc.select(els.toString())) {
-                log.info(el.text() + " " + el.attr("abs:href"));
+                News news = News.builder()
+                        .id(1L)
+                        .subject(el.text())
+                        .type("naver")
+                        .newsUrl(el.attr("abs:href"))
+                        .build();
+                log.info(String.valueOf(news));
+
             }
         } catch (IOException e) {
             e.printStackTrace();
