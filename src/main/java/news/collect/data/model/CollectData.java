@@ -25,4 +25,12 @@ public class CollectData extends BaseTimeEntity {
     @Column(name = "newsType")
     private String newsType;
 
+    @Override
+    public String toString() {
+        return "CollectData{" +
+                "id=" + id +
+                ", keyword='" + keyword + '\'' +
+                ", newsType='" + newsType + '\'' +
+                '}';
+    }
 }
