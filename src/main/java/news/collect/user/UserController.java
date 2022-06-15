@@ -37,6 +37,11 @@ public class UserController extends BaseController {
         this.passwordEncoder = passwordEncoder;
     }
 
+    /**
+     * 회원가입
+     * @param param
+     * @return
+     */
     @PostMapping("join")
     public BaseModel userSave(@RequestBody User param) {
         BodyModel body = new BodyModel();
@@ -52,6 +57,11 @@ public class UserController extends BaseController {
         return ok(body);
     }
 
+    /**
+     * 로그인
+     * @param param
+     * @return
+     */
     @ResponseBody
     @PostMapping("/login")
     public BaseModel userLogin(@RequestBody User param) {
