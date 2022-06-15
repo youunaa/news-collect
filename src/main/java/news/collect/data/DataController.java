@@ -11,11 +11,11 @@ import news.collect.repository.CollectDataRepository;
 import news.collect.repository.NewsRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import java.io.UnsupportedEncodingException;
 
@@ -81,10 +81,12 @@ public class DataController extends BaseController {
      * @return
      */
     @ResponseBody
-    @PostMapping("news/list")
-    public BaseModel newsList() {
+    @GetMapping("news/list")
+    public BaseModel newsList(Pageable pageable) {
         BodyModel body = new BodyModel();
-        body.setBody(newsRepository.findAll());
+
+        Pageable pageWithTenElements = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), Sort.Direction.DESC, "id");
+        body.setBody(newsRepository.findAll(pageable));
         return ok(body);
     }
 
