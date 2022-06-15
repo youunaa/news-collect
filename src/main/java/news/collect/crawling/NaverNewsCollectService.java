@@ -1,5 +1,7 @@
 package news.collect.crawling;
 
+import news.collect.crawling.model.News;
+import news.collect.repository.NewsRepository;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -10,10 +12,17 @@ import org.springframework.stereotype.Service;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+import java.util.Date;
 
 @Service("NaverNewsCollectService")
 public class NaverNewsCollectService implements NewsCollectService {
     public static Logger log = LoggerFactory.getLogger(NaverNewsCollectService.class);
+
+    private final NewsRepository newsRepository;
+
+    public NaverNewsCollectService(NewsRepository newsRepository) {
+        this.newsRepository = newsRepository;
+    }
 
     @Override
     public void NewsCrawling() throws UnsupportedEncodingException {
@@ -33,7 +42,12 @@ public class NaverNewsCollectService implements NewsCollectService {
                     .append(".news_tit");
 
             for (Element el : doc.select(els.toString())) {
-                log.info(el.text() + " " + el.attr("abs:href"));
+                News news = News.builder()
+                        .subject(el.text())
+                        .type("naver")
+                        .newsUrl(el.attr("abs:href"))
+                        .build();
+                newsRepository.save(news);
             }
         } catch (IOException e) {
             e.printStackTrace();

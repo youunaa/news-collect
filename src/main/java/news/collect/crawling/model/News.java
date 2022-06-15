@@ -3,15 +3,17 @@ package news.collect.crawling.model;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
+import news.collect.repository.BaseTimeEntity;
 
 import javax.persistence.*;
+import java.util.Date;
 
 @Getter
 @Setter
 @Builder
 @Entity
 @Table(name = "News")
-public class News {
+public class News extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy= GenerationType.AUTO)
@@ -26,17 +28,22 @@ public class News {
 
     @Column(name="newsUrl")
     private String newsUrl; // 뉴스 url
+    
+    @Column(name="collectDt", nullable = true)
+    private Date collectDt; // 데이터 수집일
+
+    public News(Long id, String type, String subject, String newsUrl, Date collectDt) {
+        this.id = id;
+        this.type = type;
+        this.subject = subject;
+        this.newsUrl = newsUrl;
+        this.collectDt = collectDt;
+    }
 
     public News() {
 
     }
 
-    public News(Long id, String type, String subject, String newsUrl) {
-        this.id = id;
-        this.type = type;
-        this.subject = subject;
-        this.newsUrl = newsUrl;
-    }
 
     @Override
     public String toString() {
